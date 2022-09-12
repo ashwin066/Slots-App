@@ -10,7 +10,7 @@ class ColorDots extends StatefulWidget {
     required this.product,
   }) : super(key: key);
 
-  final Product product;
+  final product;
 
   @override
   State<ColorDots> createState() => _ColorDotsState();
@@ -29,9 +29,9 @@ class _ColorDotsState extends State<ColorDots> {
       child: Row(
         children: [
           ...List.generate(
-            widget.product.colors.length,
+            widget.product["colors"].length,
             (index) => buildColorDots(
-                color: widget.product.colors[index], index: index),
+                color: widget.product["colors"][index], index: index),
           ),
           const Spacer(),
           RoundedIconBtn(
@@ -68,8 +68,7 @@ class _ColorDotsState extends State<ColorDots> {
         decoration: BoxDecoration(
           color: Colors.transparent,
           border: Border.all(
-            color:
-                (selectedColor == index) ? kPrimaryColor : Colors.transparent,
+            color: (selectedColor == index) ? PrimaryColor : Colors.transparent,
           ),
           shape: BoxShape.circle,
         ),

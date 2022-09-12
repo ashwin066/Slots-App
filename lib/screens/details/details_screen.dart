@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shop_ecommerce/models/product.dart';
+import 'package:shop_ecommerce/constants.dart';
 import 'package:shop_ecommerce/screens/details/components/body.dart';
 import 'package:shop_ecommerce/screens/details/components/custom_app_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key? key}) : super(key: key);
@@ -14,12 +15,10 @@ class DetailsScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as ProductDetailsArguments;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F6F9),
+      backgroundColor: PrimaryColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: CustomAppBar(
-          rating: agrs.product.rating,
-        ),
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height * 1.3.h),
+        child: CustomAppBar(),
       ),
       body: Body(product: agrs.product),
     );
@@ -27,7 +26,7 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class ProductDetailsArguments {
-  final Product product;
+  final product;
 
   ProductDetailsArguments({required this.product});
 }

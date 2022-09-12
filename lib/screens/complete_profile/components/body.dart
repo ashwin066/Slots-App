@@ -28,14 +28,14 @@ class _BodyState extends State<Body> {
                 style: headingStyle,
               ),
               const Text(
-                "Complete your details or continue\nwith social media",
+                "Complete your details & continue\nto explore",
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: SizeConfig.screenHeight! * 0.05),
               const CompleteProfileForm(),
               SizedBox(height: getProportionateScreenHeight(30)),
               const Text(
-                "By continuing yout confirm that your agree\nwith our Term and Condition",
+                "By continuing you confirm that your agree\nwith our Term(s) and Condition(s)",
                 textAlign: TextAlign.center,
               ),
             ],

@@ -10,11 +10,11 @@ class SplashData {
 
 List<SplashData> splashData = [
   SplashData(
-    text: "Welcome to Tokoto, Let’s shop!",
+    text: "Welcome to Foundyo, Let’s shop!",
     image: "assets/images/splash_1.png",
   ),
   SplashData(
-    text: "We help people conect with store\naround United State of America",
+    text: "We help you to connect with store(s)",
     image: "assets/images/splash_2.png",
   ),
   SplashData(

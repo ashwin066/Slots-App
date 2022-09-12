@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_ecommerce/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({
@@ -24,7 +25,7 @@ class ProfileMenu extends StatelessWidget {
         style: TextButton.styleFrom(
           padding: const EdgeInsets.all(20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(15.r),
           ),
           backgroundColor: const Color(0xFFF5F6F9),
         ),
@@ -33,10 +34,11 @@ class ProfileMenu extends StatelessWidget {
           children: [
             SvgPicture.asset(
               icon,
-              width: 22,
-              color: kPrimaryColor,
+              height: 25.h,
+              width: 25.w,
+              color: LightGray,
             ),
-            const SizedBox(width: 20),
+              SizedBox(width: 15.w),
             Expanded(
               child: Text(
                 text,

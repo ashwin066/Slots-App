@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shop_ecommerce/constants.dart';
+import 'package:shop_ecommerce/screens/search/search_screen.dart';
 import 'package:shop_ecommerce/size_config.dart';
 
 class SearchField extends StatelessWidget {
@@ -12,12 +14,18 @@ class SearchField extends StatelessWidget {
     return Container(
       width: SizeConfig.screenWidth! * 0.6,
       decoration: BoxDecoration(
-        color: kSecondaryColor.withOpacity(0.1),
+        color: aWhite.withOpacity(0.9),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
-        onChanged: (value) {
-          // Search value
+        readOnly: true,
+        onTap: ()=>{
+            Navigator.of(context)
+          .pushReplacement(PageTransition(
+            type: PageTransitionType.rightToLeftWithFade,
+            duration: Duration(milliseconds: 450),
+            reverseDuration: Duration(milliseconds: 400),
+            child: SearchScreen())) 
         },
         decoration: InputDecoration(
           enabledBorder: InputBorder.none,

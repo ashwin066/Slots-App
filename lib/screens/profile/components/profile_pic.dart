@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
@@ -34,7 +35,11 @@ class ProfilePic extends StatelessWidget {
                   side: const BorderSide(color: Colors.white),
                 ),
                 onPressed: () {},
-                child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
+                child: SvgPicture.asset(
+                  "assets/icons/Camera Icon.svg",
+                  height: 25.h,
+                  width: 25.w,
+                ),
               ),
             ),
           ),

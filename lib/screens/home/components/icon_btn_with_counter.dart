@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_ecommerce/constants.dart';
 import 'package:shop_ecommerce/size_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IconBtnWithCounter extends StatelessWidget {
   const IconBtnWithCounter({
     Key? key,
     required this.svgSrc,
-    this.numOfItems = 0,
+    this.numOfItems = 1, //check this later
     required this.press,
   }) : super(key: key);
 
@@ -19,32 +20,37 @@ class IconBtnWithCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: press,
-      borderRadius: BorderRadius.circular(50),
+      borderRadius: BorderRadius.circular(50).r,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
             padding: EdgeInsets.all(getProportionateScreenWidth(12)),
-            height: getProportionateScreenWidth(46),
-            width: getProportionateScreenWidth(46),
+            height: getProportionateScreenWidth(46.h),
+            width: getProportionateScreenWidth(46.w),
             decoration: BoxDecoration(
-              color: kSecondaryColor.withOpacity(0.1),
+              color: aWhite,
               shape: BoxShape.circle,
             ),
-            child: SvgPicture.asset(svgSrc),
+            child: SvgPicture.asset(
+              svgSrc,
+              height: 30.h,
+              width: 30.w,
+              color: LightGray,
+            ),
           ),
           if (numOfItems != 0)
             Positioned(
               top: -3,
               right: 0,
               child: Container(
-                height: getProportionateScreenWidth(16),
-                width: getProportionateScreenWidth(16),
+                height: getProportionateScreenWidth(16.h),
+                width: getProportionateScreenWidth(16.w),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFF4848),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    width: 1.5,
+                    width: 1.5.w,
                     color: Colors.white,
                   ),
                 ),
@@ -52,8 +58,8 @@ class IconBtnWithCounter extends StatelessWidget {
                   child: Text(
                     "$numOfItems",
                     style: TextStyle(
-                      fontSize: getProportionateScreenWidth(10),
-                      height: 1,
+                      fontSize: getProportionateScreenWidth(10.sp),
+                      height: 1.h,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "149033299510",
+    "project_id": "foundyo-52bc1",
+    "storage_bucket": "foundyo-52bc1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149033299510:android:0d3ee82f3254f4f2c3f297",
+        "android_client_info": {
+          "package_name": "com.foundyo.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149033299510-8vf4ttns28tkvfvhi5nfov72n7blsi74.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foundyo.user",
+            "certificate_hash": "f1ccfaf07b62ee1fefe5c470da367bd80babfba3"
+          }
+        },
+        {
+          "client_id": "149033299510-0dfkp0fvn7r7dej49dlf1j6r9antktj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0Zlmr_Olsb3JRmiPDWVS9iBMy7Tub3Bw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149033299510-0dfkp0fvn7r7dej49dlf1j6r9antktj6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:shop_ecommerce/constants.dart';
-import 'package:shop_ecommerce/models/product.dart';
-import 'package:shop_ecommerce/size_config.dart';
+  import 'package:shop_ecommerce/service/controllers/product_controller.dart';
+ import 'package:shop_ecommerce/size_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
+  ProductCard({
     Key? key,
     this.width = 140,
     this.aspectRetion = 1.02,
-    required this.product,
     required this.press,
+    required this.index,
   }) : super(key: key);
 
   final double width, aspectRetion;
-  final Product product;
-  final GestureTapCallback press;
 
+  final GestureTapCallback press;
+  final int index;
+  final ProductController productController = Get.find();
+ 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: getProportionateScreenWidth(20),
+    return Container(
+      margin: EdgeInsets.only(right: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: aWhite,
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: GestureDetector(
         onTap: press,
@@ -32,52 +39,92 @@ class ProductCard extends StatelessWidget {
               AspectRatio(
                 aspectRatio: aspectRetion,
                 child: Container(
-                  padding: EdgeInsets.all(getProportionateScreenWidth(20)),
+                  padding: EdgeInsets.all(getProportionateScreenWidth(7)),
                   decoration: BoxDecoration(
-                    color: kSecondaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(15),
+                    color: aWhite,
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
-                  child: Image.asset(product.images[0]),
+                  child: Image.network(
+                      productController.products[index].images[0]),
                 ),
               ),
               const SizedBox(height: 5),
               Text(
-                product.title,
+                "${productController.products[index].product_name.toString()}",
                 style: const TextStyle(
                   color: Colors.black,
                 ),
                 maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: 3),
+              Row(
+                children: [
+                  Text(
+                    "${productController.products[index].rating.toString()}",
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: aBlack),
+                  ),
+                  SizedBox(width: 5.w),
+                  SvgPicture.asset(
+                    "assets/icons/Star Icon.svg",
+                    height: 14.h,
+                    width: 14.w,
+                    color: Color.fromARGB(255, 255, 196, 0),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 3),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "\$${product.price}",
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(18),
-                      fontWeight: FontWeight.w600,
-                      color: kPrimaryColor,
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "\₹${productController.products[index].current_price.toString()}",
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600,
+                          color: PrimaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        "${productController.products[index].mrp.toString()}",
+                        style: TextStyle(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w600,
+                            color: kTextColor,
+                            decoration: TextDecoration.lineThrough),
+                      ),
+                    ],
                   ),
                   InkWell(
-                    borderRadius: BorderRadius.circular(30),
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.all(getProportionateScreenWidth(8)),
-                      width: getProportionateScreenWidth(28),
-                      height: getProportionateScreenWidth(28),
-                      decoration: BoxDecoration(
-                        color: product.isFavourite
-                            ? kPrimaryColor.withOpacity(0.15)
-                            : kSecondaryColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        "assets/icons/Heart Icon_2.svg",
-                        color: product.isFavourite
-                            ? const Color(0xFFFF4848)
-                            : const Color(0xFFDBDEE4),
-                      ),
+                    onTap: () {
+                     
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(9),
+                          decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(6.r),
+                          ),
+                          child: SvgPicture.asset(
+                            
+                            "assets/icons/Plus Icon.svg",
+                            color: PrimaryColor,
+                            height: 12.h,
+                            width: 12.w,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

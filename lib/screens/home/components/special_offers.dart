@@ -15,7 +15,7 @@ class SpecialOffers extends StatelessWidget {
           text: "Special for you",
           press: () {},
         ),
-        SizedBox(height: getProportionateScreenWidth(20)),
+        SizedBox(height: getProportionateScreenWidth(15)),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -32,7 +32,7 @@ class SpecialOffers extends StatelessWidget {
                 numOfBrands: 24,
                 press: () {},
               ),
-              SizedBox(width: getProportionateScreenWidth(20))
+              SizedBox(width: getProportionateScreenWidth(15))
             ],
           ),
         ),
@@ -57,7 +57,7 @@ class SpecialOfferCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(15)),
       child: GestureDetector(
         onTap: press,
         child: SizedBox(

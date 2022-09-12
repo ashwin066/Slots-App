@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:shop_ecommerce/components/default_button.dart';
 import 'package:shop_ecommerce/constants.dart';
+import 'package:shop_ecommerce/service/controllers/cartController.dart';
 import 'package:shop_ecommerce/size_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CheckOurCard extends StatelessWidget {
-  const CheckOurCard({
+  CheckOurCard({
     Key? key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CartController());
+ 
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: getProportionateScreenWidth(15),
@@ -45,7 +49,11 @@ class CheckOurCard extends StatelessWidget {
                     color: const Color(0xFFF5F6F9),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: SvgPicture.asset("assets/icons/receipt.svg"),
+                  child: SvgPicture.asset(
+                    "assets/icons/receipt.svg",
+                    height: 25.h,
+                    width: 25.w,
+                  ),
                 ),
                 const Spacer(),
                 const Text("Add voucher code"),
@@ -61,21 +69,29 @@ class CheckOurCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text.rich(
-                  TextSpan(
-                    text: "Total:\n",
-                    children: [
+                GetX<CartController>(
+                  init: CartController(),
+                  builder: (controller) {
+                  return  Text.rich( 
                       TextSpan(
-                        text: "\$337.15",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        text: "Total:\n",
+                        style: TextStyle(fontSize: 14.sp, color: LightGray),
+                        children: [
+                          TextSpan(
+                            text: "₹ ${controller.ggg}",
+                            style:
+                                TextStyle(fontSize: 18.sp, color: Colors.black),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(190),
                   child: DefaultButton(
                     text: "Check Out",
+                    button_color: PrimaryColor,
                     press: () {},
                   ),
                 ),

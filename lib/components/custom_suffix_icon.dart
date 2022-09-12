@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shop_ecommerce/constants.dart';
 import 'package:shop_ecommerce/size_config.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomSuffixIcon extends StatelessWidget {
   const CustomSuffixIcon({
     Key? key,
@@ -15,13 +16,13 @@ class CustomSuffixIcon extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         0,
-        getProportionateScreenWidth(20),
-        getProportionateScreenWidth(20),
-        getProportionateScreenWidth(20),
+        getProportionateScreenWidth(10),
+        getProportionateScreenWidth(10),
+        getProportionateScreenWidth(10),
       ),
       child: SvgPicture.asset(
         svgIcon,
-        height: getProportionateScreenHeight(18),
+        height: 28.h, width: 28.w,color: LightGray,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shop_ecommerce/components/default_button.dart';
 import 'package:shop_ecommerce/constants.dart';
 import 'package:shop_ecommerce/models/splash.dart';
@@ -32,8 +33,9 @@ class _BodyState extends State<Body> {
                     currentPage = value;
                   });
                 },
+                pageSnapping: true,
                 itemCount: splashData.length,
-                itemBuilder: (context, index) => SplashContent(
+                itemBuilder: (context,index) => SplashContent(
                   text: splashData[index].text,
                   image: splashData[index].image,
                 ),
@@ -55,11 +57,19 @@ class _BodyState extends State<Body> {
                         (index) => buildDot(index: index),
                       ),
                     ),
-                    const Spacer(flex: 3),
+                    const Spacer(flex: 2),
+                    
+                    
                     DefaultButton(
                       text: "Continue",
+                      button_color: PrimaryColor,
                       press: () {
-                        Navigator.pushNamed(context, SignInScreen.routeName);
+                         Navigator.of(context).pushReplacement(PageTransition(
+                            type: PageTransitionType.rightToLeftWithFade,
+                            duration: Duration(milliseconds: 650),
+                         
+                            childCurrent: widget,
+                            child: SignInScreen()));
                       },
                     ),
                     const Spacer(),
@@ -80,7 +90,7 @@ class _BodyState extends State<Body> {
       height: 6,
       width: currentPage == index ? 20 : 6,
       decoration: BoxDecoration(
-        color: currentPage == index ? kPrimaryColor : const Color(0xFFD8D8D8),
+        color: currentPage == index ? PrimaryColor : const Color(0xFFD8D8D8),
         borderRadius: BorderRadius.circular(3),
       ),
     );

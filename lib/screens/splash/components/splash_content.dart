@@ -17,10 +17,10 @@ class SplashContent extends StatelessWidget {
       children: <Widget>[
         const Spacer(),
         Text(
-          "TOKOTO",
+          "Foundyo",
           style: TextStyle(
             fontSize: getProportionateScreenWidth(36),
-            color: kPrimaryColor,
+            color: PrimaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -1,8 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.shop_ecommerce">
+    package="com.foundyo.user">
+   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
-        android:label="Shop eCommerce"
+
+
+        android:label="Foundyo"
         android:icon="@mipmap/launcher_icon">
+              <meta-data android:name="com.google.android.geo.API_KEY" 
+      android:value="AIzaSyD63a3gVLviNVW1RTMQgCG4OwaV2ZYakxE"/>  
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
