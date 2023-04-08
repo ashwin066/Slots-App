@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shop_ecommerce/screens/all_view/all_view.dart';
 import 'package:shop_ecommerce/screens/complete_profile/components/body.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class CompleteProfileScreen extends StatelessWidget {
   const CompleteProfileScreen({Key? key}) : super(key: key);
@@ -9,10 +11,9 @@ class CompleteProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign Up"),
+      body: const AllView(
+        body: Body(),
       ),
-      body: const Body(),
     );
   }
 }

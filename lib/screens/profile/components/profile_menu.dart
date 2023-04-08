@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_ecommerce/constants.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({
@@ -16,36 +17,44 @@ class ProfileMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
-      ),
+    return Container(
+      decoration:
+          BoxDecoration(border: Border.symmetric(horizontal: BorderSide(width: .3, color: MuchLightGray), )),
       child: TextButton(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.all(20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.r),
-          ),
-          backgroundColor: const Color(0xFFF5F6F9),
-        ),
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsets>(paddingMarginAll15),
+  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.zero,
+     )
+  )
+),
         onPressed: press,
         child: Row(
           children: [
+            SizedBox(width: getProportionateScreenHeight(3)),
+
             SvgPicture.asset(
               icon,
-              height: 25.h,
-              width: 25.w,
-              color: LightGray,
+              height: getProportionateScreenHeight(25) ,
+              width:  getProportionateScreenHeight(25)  ,
+              color: DarkGray,
             ),
-              SizedBox(width: 15.w),
+            SizedBox(width:  getProportionateScreenHeight(15)),
             Expanded(
               child: Text(
                 text,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: text15DarkGrayFw400,
               ),
             ),
-            const Icon(Icons.arrow_forward_ios),
+            SvgPicture.asset(
+              "assets/icons/arrow_right.svg",
+              color: LightGray,
+              height: getProportionateScreenHeight(15),
+              width: getProportionateScreenHeight(15),
+            ),
+            SizedBox(width: getProportionateScreenHeight(3)),
+
           ],
         ),
       ),

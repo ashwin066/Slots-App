@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shop_ecommerce/components/custom_suffix_icon.dart';
 import 'package:shop_ecommerce/components/default_button.dart';
@@ -10,7 +10,6 @@ import 'package:shop_ecommerce/screens/otp/otp_screen.dart';
 //import 'package:shop_ecommerce/screens/home/home_screen.dart';
 //import 'package:shop_ecommerce/screens/login_success/login_success_screen.dart';
 import 'package:shop_ecommerce/size_config.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignForm extends StatefulWidget {
   const SignForm({Key? key}) : super(key: key);
@@ -80,6 +79,11 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildEmailFormField() {
     return TextFormField(
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+      ],
+      // Only numbers can be entered
+      autofocus: true,
       controller: _phoneController,
       keyboardType: TextInputType.phone,
       onSaved: (newValue) => phone == newValue,
@@ -90,7 +94,7 @@ class _SignFormState extends State<SignForm> {
         return;
       },
       maxLength: 10,
-      inputFormatters: [FilteringTextInputFormatter.deny(new RegExp(r"\s\b|\b\s"))],
+
       validator: (value) {
         if (value!.isEmpty) {
           addError(error: kPhoneNumberNullError);
@@ -130,7 +134,7 @@ class _SignFormState extends State<SignForm> {
               style: TextStyle(color: aBlack.withOpacity(0.5), fontSize: 14.sp))
         ]),
         suffixIcon: CustomSuffixIcon(
-          svgIcon: "assets/icons/Call.svg", 
+          svgIcon: "assets/icons/Call.svg",
         ),
       ),
     );

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shop_ecommerce/constants.dart';
-import 'package:shop_ecommerce/size_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class SocialCard extends StatelessWidget {
   const SocialCard({
@@ -23,14 +22,14 @@ class SocialCard extends StatelessWidget {
           horizontal: getProportionateScreenWidth(10),
         ),
         padding: EdgeInsets.all(getProportionateScreenWidth(10)),
-        height:45.h,
-        width:45.h,
+        height: 45.h,
+        width: 45.h,
         decoration: const BoxDecoration(
           color: Color(0xFFF5F6F9),
           shape: BoxShape.circle,
         ),
         child: SvgPicture.asset(
-          icon, 
+          icon,
           height: 30.h,
           width: 30.w,
         ),

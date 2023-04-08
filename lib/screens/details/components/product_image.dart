@@ -1,11 +1,15 @@
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/carousel/gf_carousel.dart';
+import 'package:shop_ecommerce/components/icon_button.dart';
+import 'package:shop_ecommerce/components/simmer.dart';
 import 'package:shop_ecommerce/constants.dart';
 import 'package:shop_ecommerce/size_config.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProductImages extends StatefulWidget {
+class ProductImages extends StatelessWidget {
   const ProductImages({
     Key? key,
     required this.product,
@@ -14,91 +18,80 @@ class ProductImages extends StatefulWidget {
   final product;
 
   @override
-  _ProductImagesState createState() => _ProductImagesState();
-}
-
-class _ProductImagesState extends State<ProductImages> {
-  int selectedImage = 0;
-  final CarouselController _controller = CarouselController();
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: Alignment.topRight,
       children: [
-        CarouselSlider(
-            carouselController: _controller,
-            options: CarouselOptions(
-              height: 300.h,
-              aspectRatio: 5 / 5,
-              viewportFraction: 0.97,
-              initialPage: 0,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              enlargeCenterPage: true,
-              autoPlayInterval: Duration(seconds: 8),
-              autoPlayAnimationDuration: Duration(milliseconds: 350),
-              autoPlayCurve: Curves.easeInOut,
-              scrollDirection: Axis.horizontal,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  selectedImage = index;
-                });
-              },
+        GFCarousel(
+          enlargeMainPage: true,
+          hasPagination: true,
+          activeIndicator: MediumPinkPurple,
+          passiveIndicator: DarkPurple,
+          items: [
+            ...List.generate(
+              product.imageURLs.length,
+              (index) => Padding(
+                padding:
+                    EdgeInsets.only(bottom: getProportionateScreenHeight(25)),
+                child: ClipRRect(
+                  borderRadius: borderRadius18,
+                  child: CachedNetworkImage(
+                    imageUrl: product.imageURLs[index],
+                    fit: BoxFit.contain,
+
+                    // width: MediaQuery.of(context).size.width,
+                    placeholder: (context, url) => Simmer(
+                      borderRadius: BorderRadius.zero,
+                    ),
+
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
+              ),
             ),
-            items: [
-              ...List.generate(
-                  widget.product.images.length,
-                  (index) => Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: getProportionateScreenWidth(10)),
-                        decoration: BoxDecoration(
-                            color: aWhite,
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    widget.product.images[index]),
-                                fit: BoxFit.contain)),
-                      )),
-            ]),
-
-        // SizedBox(height: getProportionateScreenWidth(20)),
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...List.generate(widget.product.images.length,
-                  (index) => buildSmallProductPreview(index)),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  GestureDetector buildSmallProductPreview(int index) {
-    return GestureDetector(
-      onTap: () {
-        _controller.animateToPage(index);
-      },
-      child: AnimatedContainer(
-        duration: defaultDuration,
-        margin: const EdgeInsets.only(right: 15),
-        padding: const EdgeInsets.all(8),
-        height: getProportionateScreenWidth(48),
-        width: getProportionateScreenWidth(48),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(
-            width: 2,
-            color: GlowBlue.withOpacity(selectedImage == index ? 1 : 0),
-          ),
+          ],
+          height: getProportionateScreenHeight(250),
+          aspectRatio: 5 / 5,
+          viewportFraction: 0.97,
+          enableInfiniteScroll: true,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 8),
+          autoPlayAnimationDuration: Duration(milliseconds: 350),
+          autoPlayCurve: Curves.easeInOut,
+          scrollDirection: Axis.horizontal,
         ),
-        child: Image.network(widget.product.images[index]),
-      ),
+        IconButtonCustom(
+            press: () async {
+              EasyLoading.show(status: "Please wait");
+              final dynamicLinkParams = DynamicLinkParameters(
+                link: Uri.parse(
+                    "https://foundyo-52bc1.web.app/product/${product.id}"),
+                uriPrefix: "https://slotslive.page.link",
+                androidParameters: AndroidParameters(
+                    packageName: "com.foundyo.user",
+                    fallbackUrl: Uri.parse('https://foundyo-52bc1.web.app')),
+                iosParameters: IOSParameters(
+                    bundleId: "com.foundyo.user",
+                    fallbackUrl: Uri.parse('ttps://foundyo-52bc1.web.app')),
+              );
+
+              //for long url
+              // final link = await FirebaseDynamicLinks.instance
+              //     .buildLink(dynamicLinkParams);
+              //for short url
+              final dynamicLink = await FirebaseDynamicLinks.instance
+                  .buildShortLink(dynamicLinkParams);
+              EasyLoading.dismiss();
+              await Share.share(dynamicLink.shortUrl.toString());
+            },
+            icon: "assets/icons/share.svg",
+            height: 17,
+            width: 17,
+            customMargin: 13,
+            color: aWhite,
+            customPadding: 10,
+            bgColor: transparentDarkPurple),
+      ],
     );
   }
 }

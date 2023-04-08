@@ -1,83 +1,137 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutterfire_ui/firestore.dart';
+import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_ecommerce/components/back_button.dart';
+import 'package:shop_ecommerce/components/icon_btn_with_counter.dart';
+import 'package:shop_ecommerce/components/simmer.dart';
+import 'package:shop_ecommerce/components/simmerContainer.dart';
+import 'package:shop_ecommerce/components/ticket_bg.dart';
 import 'package:shop_ecommerce/constants.dart';
-import 'package:shop_ecommerce/screens/cart/cart_screen.dart';
-import 'package:shop_ecommerce/screens/home/components/icon_btn_with_counter.dart';
+import 'package:shop_ecommerce/models/tickets.dart';
+import 'package:shop_ecommerce/models/user_model.dart';
+import 'package:shop_ecommerce/provider/user_provider.dart';
+import 'package:shop_ecommerce/screens/main_page/main_page.dart';
+import 'package:shop_ecommerce/screens/my_tickets/my_tickets.dart';
+import 'package:shop_ecommerce/service/firebase_service.dart';
 import 'package:shop_ecommerce/size_config.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomAppBarLeading extends StatelessWidget {
-  const CustomAppBarLeading({
+class CustomAppBar extends StatelessWidget {
+  const CustomAppBar({
     Key? key,
+    this.child,
+    this.viewLogo,
+    this.viewTicketCount,
+    this.text,
+    this.needBackBtn,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return BackButtton();
-  }
-}
+  final Widget? child;
+  final String? text;
+  final bool? viewLogo;
+  final bool? viewTicketCount;
+  final bool? needBackBtn;
 
-class CustomMainAppBar extends StatelessWidget {
-  const CustomMainAppBar(
-      {Key? key, required this.title, required this.subtitle,required this.type})
-      : super(key: key);
-  final title;
-  final subtitle;
-  final type;
   @override
   Widget build(BuildContext context) {
+    Tickets? tickets = Provider.of<Tickets?>(context);
+
     return SafeArea(
-      child: Expanded(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          color: PrimaryColor,
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BackButtton(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                        color: aWhite,
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                        color: kTextColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400),
-                  ),
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+          child: Container(
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  aWhite,
+                  transparentWhite,
+                  transparentWhite.withOpacity(.3),
                 ],
               ),
-              type=="cart"?          
-              Container(
-                padding: EdgeInsets.all(5),
-                 decoration: BoxDecoration(
-                  color: SecondaryColor,
-                  borderRadius: BorderRadius.all(Radius.circular(9)),
-                  ),
-                child: Text("Offers",style:  TextStyle(
-                        color: aWhite,
-                        fontSize: 13.sp,
-                        fontWeight:FontWeight.w500
-                      ),),
-              )
-              :
-                IconBtnWithCounter(
-                      svgSrc: "assets/icons/Cart Icon.svg",
-                      press: () =>
-                          Navigator.pushNamed(context, CartScreen.routeName),
+            ),
+            //margin: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+            padding: paddingMarginAll15,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    if (viewLogo == true)
+                      Image.asset(
+                        "assets/images/foreground_logo.png",
+                        height: getProportionateScreenHeight(35),
+                      ),
+                    if (viewLogo != true)
+                      if (needBackBtn != false) BackButtton(),
+                    if (needBackBtn != false)
+                      if (text != null)
+                        SizedBox(
+                          width: getProportionateScreenHeight(15),
+                        ),
+                    if (text != null)
+                      Text(
+                        text!,
+                        style: text18DarkFw500,
+                      ),
+                  ],
+                ),
+                if (viewTicketCount == true)
+                  if (tickets == null)
+                    SizedBox(
+                      width: getProportionateScreenHeight(90),
+                      child: Simmer(
+                        borderRadius: borderRadius10,
+                        height: double.infinity,
+                      ),
+                    ),
+                if (tickets != null)
+                  if (viewTicketCount == true)
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(PageTransition(
+                            type: PageTransitionType.fade,
+                            duration: defaultDuration,
+                            reverseDuration: defaultDuration,
+                            child: MyTickets(
+                              current: 1,
+                            )));
+                      },
+                      child: Container(
+                          //  width: getProportionateScreenHeight(90),
+                          padding: paddingMarginLR15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: transparentDarkPurple.withOpacity(.1),
+                              borderRadius: borderRadius10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "${tickets.ticketCount}",
+                                style: text20DarkFw700,
+                              ),
+                              SizedBox(
+                                width: getProportionateScreenHeight(7),
+                              ),
+                              SvgPicture.asset(
+                                "assets/icons/ticket_filled.svg",
+                                height: getProportionateScreenHeight(23),
+                                width: getProportionateScreenHeight(23),
+                                color: DarkPurple,
+                              ),
+                            ],
+                          )),
                     )
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -1,37 +1,65 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:shop_ecommerce/components/bg_box.dart';
+import 'package:shop_ecommerce/components/my_progress_bar.dart';
+import 'package:shop_ecommerce/components/progress_segmented.dart';
+import 'package:shop_ecommerce/components/simmer.dart';
 import 'package:shop_ecommerce/constants.dart';
-  import 'package:shop_ecommerce/service/controllers/product_controller.dart';
- import 'package:shop_ecommerce/size_config.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shop_ecommerce/models/minimum_product_model.dart';
+import 'package:shop_ecommerce/screens/home/components/body.dart';
+import 'package:shop_ecommerce/screens/details/details_screen.dart';
+import 'package:shop_ecommerce/screens/home/home_screen.dart';
+import 'package:shop_ecommerce/service/firebase_service.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({
+  const ProductCard({
     Key? key,
+    required this.product,
+    required this.id,
     this.width = 140,
-    this.aspectRetion = 1.02,
-    required this.press,
-    required this.index,
+    this.aspectRetion = 1.02, 
   }) : super(key: key);
-
   final double width, aspectRetion;
-
-  final GestureTapCallback press;
-  final int index;
-  final ProductController productController = Get.find();
- 
-  @override
+  final MinimumProduct product;
+  final String id;
+   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 8),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      margin: EdgeInsets.only(right: getProportionateScreenHeight(10),top:  getProportionateScreenHeight(3),bottom:  getProportionateScreenHeight(3)),
+      padding: paddingMarginAll8,
       decoration: BoxDecoration(
-        color: aWhite,
-        borderRadius: BorderRadius.circular(10.r),
-      ),
+          color: aWhite,
+          borderRadius: BorderRadius.circular(10),
+        //  boxShadow: [
+        //   BoxShadow(
+        //     color: DarkPurple,
+        //     blurRadius: 0,
+        //     offset: Offset(-3, -3),
+        //   ),
+        // ],
+           border: border0by8lightGray
+          ),
       child: GestureDetector(
-        onTap: press,
+        onTap: () {
+          Navigator.of(context).push(PageTransition(
+              type: PageTransitionType.fade ,
+              duration: defaultDuration350 ,
+               curve: Curves.fastOutSlowIn,
+              reverseDuration: defaultDuration,
+              child: DetailsScreen(
+                id: id,
+              )));
+
+          // Navigator.pushNamed(
+          //   context,
+          //   DetailsScreen.routeName,
+          //   arguments: ProductDetailsArguments(product: product, id: id),
+          // );
+        },
         child: SizedBox(
           width: getProportionateScreenWidth(width),
           child: Column(
@@ -39,95 +67,60 @@ class ProductCard extends StatelessWidget {
               AspectRatio(
                 aspectRatio: aspectRetion,
                 child: Container(
-                  padding: EdgeInsets.all(getProportionateScreenWidth(7)),
+                  padding: EdgeInsets.all(getProportionateScreenWidth(6)),
                   decoration: BoxDecoration(
                     color: aWhite,
-                    borderRadius: BorderRadius.circular(10.r),
+                    borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Image.network(
-                      productController.products[index].images[0]),
+                  child: CachedNetworkImage(
+                    imageUrl: product.imageURLs![0],
+                    placeholder: (context, url) => Simmer(
+                      borderRadius: borderRadius13,
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
-              const SizedBox(height: 5),
+              SizedBox(height: getProportionateScreenHeight(5)),
               Text(
-                "${productController.products[index].product_name.toString()}",
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
-                maxLines: 2,
+                product.productName!,
+                style: text13DarkFw500,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
-              Row(
-                children: [
-                  Text(
-                    "${productController.products[index].rating.toString()}",
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: aBlack),
+              SizedBox(height: getProportionateScreenHeight(5)),
+              if (product.reservedSlots != null)
+                if (product.totalSlots != null)
+                  MyProgressBar(
+                    centerText: true,
+                    soldOutSlots: product.reservedSlots!.length,
+                    totalSlots: product.totalSlots!,
                   ),
-                  SizedBox(width: 5.w),
-                  SvgPicture.asset(
-                    "assets/icons/Star Icon.svg",
-                    height: 14.h,
-                    width: 14.w,
-                    color: Color.fromARGB(255, 255, 196, 0),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "\₹${productController.products[index].current_price.toString()}",
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
-                          color: PrimaryColor,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Text(
-                        "${productController.products[index].mrp.toString()}",
-                        style: TextStyle(
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w600,
-                            color: kTextColor,
-                            decoration: TextDecoration.lineThrough),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                     
-                    },
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(9),
-                          decoration: BoxDecoration(
-                            color: backgroundColor,
-                            borderRadius: BorderRadius.circular(6.r),
-                          ),
-                          child: SvgPicture.asset(
-                            
-                            "assets/icons/Plus Icon.svg",
-                            color: PrimaryColor,
-                            height: 12.h,
-                            width: 12.w,
-                          ),
-                        ),
-                      ],
+                  
+              SizedBox(height: getProportionateScreenHeight(5)),
+              BgBox(
+                bgColor: transparentDarkPurple.withOpacity(.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/ticket_filled.svg",
+                      height: getProportionateScreenHeight(19),
+                      width: getProportionateScreenHeight(19),
+                      color: transparentDarkPurple,
                     ),
-                  ),
-                ],
+                    SizedBox(width: getProportionateScreenWidth(5)),
+                    Text(
+                      "${product.slotPrice}",
+                      style: text15DarkFw800,
+                    ),
+                    Text(" ${product.slotPrice == 1 ? "Ticket" : "Tickets"}",
+                        style: TextStyle(
+                            color: aBlack.withOpacity(.6),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600)),
+                  ],
+                ),
               ),
             ],
           ),

@@ -1,14 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:shop_ecommerce/constants.dart';
-import 'package:shop_ecommerce/get_put_data/add_to_cart_wishlist.dart';
-import 'package:shop_ecommerce/get_put_data/remove_from_cart_wishlist.dart';
-import 'package:shop_ecommerce/service/controllers/wishlist_controller.dart';
-import 'package:shop_ecommerce/size_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_ecommerce/components/bg_box.dart';
+import 'package:shop_ecommerce/components/default_button.dart';
+import 'package:shop_ecommerce/components/my_progress_bar.dart';
+import 'package:shop_ecommerce/constants.dart';
+import 'package:shop_ecommerce/models/minimum_product_model.dart';
+import 'package:shop_ecommerce/models/user_purchased_slots_model.dart';
+import 'package:shop_ecommerce/screens/my_tickets/my_tickets.dart';
+import 'package:shop_ecommerce/screens/slot_selection/components/selection_box.dart';
+import 'package:shop_ecommerce/service/firebase_service.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class ProductDescription extends StatelessWidget {
   ProductDescription({
@@ -19,310 +23,134 @@ class ProductDescription extends StatelessWidget {
 
   final product;
   final GestureTapCallback pressOnSeeMore;
-  final wishlistController = Get.put(WishlistController());
-
   @override
   Widget build(BuildContext context) {
-    int Saved = product.mrp - product.current_price;
+    FirebaseService _service = FirebaseService();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(20),
-          ),
-          child: Text(
-            "${product.product_name.toString()}",
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: paddingMarginLR20,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 14.sp,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: PrimaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      "${product.rating.toString()}",
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: aBlack),
-                    ),
-                    SizedBox(width: 5.w),
-                    SvgPicture.asset(
-                      "assets/icons/Star Icon.svg",
-                      height: 14.h,
-                      width: 14.w,
-                    ),
-                  ],
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "${product.productName.toString()}",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 14.sp,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: PrimaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(8.r)),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    wishlistController.addProductToWishlist(product);
-                    addToUserDB(
-                        ProductData: product, 
-                        whereToAdd: "users_wishlisted_items");
-                  },
-                  child: Obx(
-                    () => Row(
-                      children: [
-                        Text(
-                          "Wishlist",
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: aBlack),
-                        ),
-                        SizedBox(width: 5.w),
-                        SvgPicture.asset(
-                          wishlistController.products.length > 0
-                              ? "assets/icons/Heart filled.svg"
-                              : "assets/icons/Heart outline.svg",
-                          color: wishlistController.products.length > 0
-                              ? TomatoRed
-                              : LightGray,
-                          height: 20.h,
-                          width: 20.w,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              SizedBox(height: getProportionateScreenHeight(5)),
+              Text(
+                "Product worth ₹${product.regularPrice.toString()}",
+                style: text15DarkGrayFw400,
               ),
-              // StreamBuilder(
-              //     stream: FirebaseFirestore.instance
-              //         .collection("users")
-              //         .doc(FirebaseAuth.instance.currentUser!.uid)
-              //         .collection("users-wishlisted-items")
-              //         .where("id", isEqualTo: product['id'])
-              //         .snapshots(),
-              //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-              //       if (snapshot.hasError) {
-              //         return Text("Something went wrong!");
-              //       } else if (snapshot.hasData) {
-              //         return InkWell(
-              //           onTap: () {
-              //             print(snapshot.data.docs.id.toString());
-              //             snapshot.data.docs.length != 0
-              //                 ? removeFromUserDB(
-              //                     id: snapshot.data.docs[0].documentID,
-              //                     whereToRemove: "users-wishlisted-items")
-              //                 : addToUserDB(
-              //                     id: product.id,
-              //                     whereToAdd: "users-wishlisted-items");
-              //           },
-              //           child: Container(
-              //             padding: EdgeInsets.symmetric(
-              //               horizontal: 14.sp,
-              //               vertical: 5,
-              //             ),
-              //             decoration: BoxDecoration(
-              //               color: PrimaryColor.withOpacity(0.1),
-              //               borderRadius:
-              //                   BorderRadius.all(Radius.circular(9.r)),
-              //             ),
-              //             child: Row(
-              //               children: [
-              //                 Text(
-              //                   "Wishlist",
-              //                   style: TextStyle(
-              //                       fontSize: 14.sp,
-              //                       fontWeight: FontWeight.w600,
-              //                       color: aBlack),
-              //                 ),
-              //                 SizedBox(width: 5.w),
-              //                 SvgPicture.asset(
-              //                   snapshot.data.docs.length != 0
-              //                       ? "assets/icons/Heart filled.svg"
-              //                       : "assets/icons/Heart outline.svg",
-              //                   color: snapshot.data.docs.length != 0
-              //                       ? SecondaryColor
-              //                       : Color.fromARGB(255, 194, 194, 194),
-              //                   height: 20.h,
-              //                   width: 20.w,
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         );
-              //       }
-              //       return SizedBox(
-              //           height: 25,
-              //           width: 25,
-              //           child: CircularProgressIndicator(
-              //             strokeWidth: 3,
-              //             color: SecondaryColor,
-              //           ));
-              //     }),
             ],
           ),
         ),
+        SizedBox(height: getProportionateScreenHeight(10)),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          margin: paddingMarginLR15,
+          padding: paddingMarginAll15,
           decoration: BoxDecoration(
-            color: PrimaryColor,
-            borderRadius: BorderRadius.circular(9.r),
-            image: DecorationImage(
-                image: AssetImage('assets/images/offer.png'),
-                alignment: Alignment.bottomRight,
-                opacity: 0.7,
-                fit: BoxFit.contain),
+            color: aWhite,
+            borderRadius: borderRadius13,
+            boxShadow: [
+              BoxShadow(
+                color: DarkPurple.withOpacity(.25),
+                blurRadius: 15,
+                offset: Offset(0, 3),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "₹ ${product.current_price.toString()}",
-                        style: TextStyle(
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.w600,
-                            color: aWhite),
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        "${product.mrp.toString()}",
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            color: aWhite.withOpacity(0.5),
-                            decoration: TextDecoration.lineThrough),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 8.w),
-                  SvgPicture.asset(
-                    "assets/icons/Flash Icon.svg",
-                    height: 25.h,
-                    width: 25.w,
-                  ),
-                ],
-              ),
-              SizedBox(height: 3.w),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Column(
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                "₹ ${Saved.toString()}.00",
-                                style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: Success),
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                "Savings",
-                                style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: SecondaryColor,
-                                ),
-                              ),
-                            ],
+                          SvgPicture.asset(
+                            "assets/icons/ticket_filled.svg",
+                            height: getProportionateScreenHeight(24),
+                            width: getProportionateScreenHeight(24),
+                            color: MediumPinkPurple,
                           ),
-                          SizedBox(height: 6.w),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.amber,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "You will earn",
-                                  style: TextStyle(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: PrimaryColor),
-                                ),
-                                Text(
-                                  " 800",
-                                  style: TextStyle(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: PrimaryColor),
-                                ),
-                                Text(
-                                  " YoCoins",
-                                  style: TextStyle(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: PrimaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 3.w),
+                          SizedBox(width: getProportionateScreenHeight(6)),
                           Text(
-                            "2 YoCoin = 1 Rupee",
-                            style: TextStyle(
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w500,
-                                color: aWhite.withOpacity(0.5)),
+                            "${product.slotPrice.toString()} Tickets / slot",
+                            style: text18DarkFw700,
                           ),
                         ],
                       ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: defaultDuration,
+                              reverseDuration: defaultDuration,
+                              child: MyTickets(
+                                current: 1,
+                              )));
+                        },
+                        child: Row(  
+                          children: [
+                           
+                            Text(
+                              "Earn tickets ",
+                              style: text13DarkGrayFw500,
+                            ),
+                            SvgPicture.asset(
+                              "assets/icons/arrow_right.svg",
+                              height: getProportionateScreenHeight(10),
+                              width: getProportionateScreenHeight(10),
+                              color: DarkGray,
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                  SizedBox(width: 8.w),
-                  SvgPicture.asset(
-                    "assets/icons/Gift Icon.svg",
-                    height: 25.h,
-                    width: 25.w,
+                  SizedBox(height: getProportionateScreenHeight(15)),
+                  if (product.reservedSlots != null)
+                    if (product.totalSlots != null)
+                      BgBox(padding: paddingMarginAll8,
+                        bgColor: MuchLightGray.withOpacity(.5),
+                        child: MyProgressBar(
+                          centerText: true,
+                          soldOutSlots: product.reservedSlots!.length,
+                          totalSlots: product.totalSlots!,
+                        ),
+                      ),
+                  SizedBox(height: getProportionateScreenHeight(1)),
+                  Text(
+                    "Out of ${product.totalSlots.toString()}",
+                    style: text13DarkFw500,
                   ),
                 ],
               ),
             ],
           ),
         ),
-        SizedBox(height: 7.h),
-        Padding(
-          padding: EdgeInsets.only(
-            left: getProportionateScreenWidth(20),
-            right: getProportionateScreenWidth(64),
-          ),
+        SizedBox(
+          height: getProportionateScreenHeight(15),
+        ),
+        Container(
+          width: double.infinity,
+          padding: paddingMarginAll20,
+          decoration: BoxDecoration(color: MuchLightGray),
           child: Text(
-            "Product Description: ${product.description.toString()}",
+            "Product Description:\n${product.description.toString()}",
             maxLines: 100,
+            style: text13DarkFw400,
           ),
         ),
         Padding(

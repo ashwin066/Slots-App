@@ -1,92 +1,84 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shop_ecommerce/components/buy_ticket_bottom_sheet.dart';
+import 'package:shop_ecommerce/components/custom_app_bar.dart';
 import 'package:shop_ecommerce/components/default_button.dart';
+import 'package:shop_ecommerce/components/footer.dart';
+import 'package:shop_ecommerce/components/gradient_button.dart';
+import 'package:shop_ecommerce/components/simmerContainer.dart';
 import 'package:shop_ecommerce/constants.dart';
-import 'package:shop_ecommerce/get_put_data/add_to_cart_wishlist.dart';
-import 'package:shop_ecommerce/screens/details/components/color_dots.dart';
+import 'package:shop_ecommerce/models/user_purchased_slots_model.dart';
+import 'package:shop_ecommerce/screens/bg_animation/bg_animation.dart';
 import 'package:shop_ecommerce/screens/details/components/product_description.dart';
 import 'package:shop_ecommerce/screens/details/components/product_image.dart';
 import 'package:shop_ecommerce/screens/details/components/top_rounded_container.dart';
-import 'package:shop_ecommerce/service/controllers/cartController.dart';
-import 'package:shop_ecommerce/service/controllers/cart_ID_Controller.dart';
-  import 'package:shop_ecommerce/size_config.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class Body extends StatelessWidget {
-    Body({Key? key, required this.product}) : super(key: key);
+  Body({
+    Key? key,
+    required this.product,
+    required this.id, 
+  }) : super(key: key);
   final product;
-
-  @override
+  final String id;
+   @override
   Widget build(BuildContext context) {
-  //  final controller = Get.put(CartController());
- //  final cartIDController = Get.put(CartIdController());
+    //  final controller = Get.put(CartController());
+    //  final cartIDController = Get.put(CartIdController());
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: ListView(
-        physics: const AlwaysScrollableScrollPhysics(), // new
-
-        children: [
-          Container(
-              margin: EdgeInsets.only(top: 10),
-              child: ProductImages(product: product)
-              ),
-          TopRoundedContainer(
-            color: Colors.white,
-            child: Column(
+      extendBodyBehindAppBar: true,
+      backgroundColor: backgroundColor,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(getProportionateScreenHeight(77.3)),
+        child: CustomAppBar(
+          viewTicketCount: true,
+        ),
+      ),
+      body: 
+           BgAnimation(opacity: .26,
+        child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(), // new
+          
               children: [
-                ProductDescription(
-                  product: product,
-                  pressOnSeeMore: () {},
-                ),
+                ProductImages(product: product),
                 TopRoundedContainer(
-                  color: const Color(0xFFF6F7F9),
+                  color: Transparent,
                   child: Column(
                     children: [
-                      //   ColorDots(product: product), //check this later
+                      ProductDescription(
+                         product: product,
+                        pressOnSeeMore: () {},
+                      ),
                     ],
                   ),
                 ),
+                const Footer(height: 170)
               ],
-            ),
-          ),
-        ],
-      ),
-      bottomSheet: TopRoundedContainer(
-        color: SecondaryColor.withOpacity(0.2),
-        child: Padding(
-          padding: EdgeInsets.only(
-            bottom: getProportionateScreenWidth(15),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: SizeConfig.screenWidth! / 2,
-                padding: EdgeInsets.only(left: 15, right: 7.5),
-                child: DefaultButton(
-                  text: "Buy Now",
-                  button_color: PrimaryColor,
-                  press: () {},
+             
                 ),
-              ),
-              Container(
-                width: SizeConfig.screenWidth! / 2,
-                padding: EdgeInsets.only(left: 7.5, right: 15),
-                child: DefaultButton(
-                  text: "Add To Cart",
-                  button_color: SecondaryColor,
-                  press: () {
-                  //  cartController.addProduct(product);
-                    
-                    addToUserDB(
-                        ProductData: product, whereToAdd: "users-cart-items");
-            //  controller.products.refresh();
-                  },
-                ),
-              ),
-            ],
           ),
+      bottomSheet: Padding(
+        padding: EdgeInsets.only(
+          bottom: getProportionateScreenWidth(15),
+        ),
+        child: Container(
+          padding: paddingMarginLR15,
+          child: GradientButton( 
+            bgColor: product.reservedSlots.length != product.totalSlots
+                  ?MuchDarkPurple: MuchDarkGray,
+              text1: product.reservedSlots.length != product.totalSlots
+                  ? "Get 1 slot"
+                  : "Return home",
+              text2: product.reservedSlots.length != product.totalSlots
+                  ? "${product.slotPrice} tickets"
+                  : null,
+               press: () {
+                product.reservedSlots.length != product.totalSlots
+                    ? showBuyTicketBottomSheet(context, id)
+                    : Navigator.pop(context);
+              }),
         ),
       ),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_ecommerce/components/rounded_icon_btn.dart';
 import 'package:shop_ecommerce/constants.dart';
-import 'package:shop_ecommerce/models/product.dart';
 import 'package:shop_ecommerce/size_config.dart';
 
 class ColorDots extends StatefulWidget {

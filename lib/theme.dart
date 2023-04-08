@@ -1,15 +1,21 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shop_ecommerce/constants.dart';
 
 ThemeData theme() {
   return ThemeData(
+    useMaterial3: true,
+    primarySwatch: Colors.deepPurple,
     scaffoldBackgroundColor: Colors.white,
     fontFamily: "GoogleSans",
     appBarTheme: appBarTheme(),
     textTheme: textTheme(),
     inputDecorationTheme: inputDecorationTheme(),
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Colors.transparent,
+    ),
   );
 }
 

@@ -1,49 +1,27 @@
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shop_ecommerce/constants.dart';
+import 'package:shop_ecommerce/size_config.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
-    Key? key,
+    Key? key, required this.imageUrl,
   }) : super(key: key);
-
+  final String imageUrl;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage("assets/images/Profile Image.png"),
-          ),
-          Positioned(
-            right: -12,
-            bottom: 0,
-            child: SizedBox(
-              height: 46,
-              width: 46,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: const Color(0xfff5f6f9),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  side: const BorderSide(color: Colors.white),
-                ),
-                onPressed: () {},
-                child: SvgPicture.asset(
-                  "assets/icons/Camera Icon.svg",
-                  height: 25.h,
-                  width: 25.w,
-                ),
-              ),
-            ),
-          ),
-        ],
+      height: getProportionateScreenHeight(65),
+      width: getProportionateScreenHeight(65),
+      child: ClipRRect(
+        borderRadius: borderRadius150,
+        child: Image.asset(
+          "assets/images/Profile Image.png",
+          height: getProportionateScreenHeight(80),
+          width: getProportionateScreenHeight(80),
+        ),
       ),
     );
   }
