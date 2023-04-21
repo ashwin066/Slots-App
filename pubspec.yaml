@@ -58,7 +58,7 @@ dependencies:
   firebase_core: ^2.1.1
   firebase_auth: ^4.1.0
   cloud_firestore: ^4.0.3
-  pinput: ^2.2.12
+  pinput: ^2.1.0
   connectivity_plus: ^3.0.2
   fluttertoast: ^8.1.1
   flutter_native_splash: ^2.2.13
