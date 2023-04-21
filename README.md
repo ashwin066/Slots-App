@@ -10,8 +10,7 @@
 
 - Mail: <a href="ashwinramesh660@gmail.com">ashwinramesh660@gmail.com</a>
  
-Sure, here's a possible description for your Slots App that you can add to your README file:
-
+ 
 <h3>Slots App</h3>
 Slots App is a mobile application developed using Flutter and Dart programming languages, with Firebase as its backend service. The app allows users to book slots for different products and participate in a game of chance to win those products.
 
