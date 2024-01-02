@@ -25,6 +25,7 @@ Flutter: A mobile app SDK for building high-performance, high-fidelity, apps for
 Dart: A client-optimized programming language that is optimized for UI development.
 Firebase: A mobile and web application development platform developed by Google.
 
+
  ![project-featured2](https://github.com/ashwin066/Slots-App/assets/93830211/0b7f9c17-ca69-4ccc-8b78-9911c86656cc)
 
 ### Screenshots
