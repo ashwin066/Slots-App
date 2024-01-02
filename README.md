@@ -26,7 +26,8 @@ Dart: A client-optimized programming language that is optimized for UI developme
 Firebase: A mobile and web application development platform developed by Google.
 
  <hr>
- ![project-featured2](https://github.com/ashwin066/Slots-App/assets/93830211/0b7f9c17-ca69-4ccc-8b78-9911c86656cc)
+![project-featured2](https://github.com/ashwin066/Slots-App/assets/93830211/c966a483-7f92-4a93-9e92-5e4b254c95ec)
+
 
 ### Screenshots
 
