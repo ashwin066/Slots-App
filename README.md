@@ -14,6 +14,24 @@
 <h3>Slots App</h3>
 Slots App is a mobile application developed using Flutter and Dart programming languages, with Firebase as its backend service. The app allows users to book slots for different products and participate in a game of chance to win those products.
 
+### Steps to get started
+go to lib/constants.dart and find > const String google_api_key = "your api key here";
+then replace it with your api key.
+
+Steps to create API key :
+1. visit console.firebase.google.com
+2. login/signup
+3. create new project
+4. goto proget settings
+5. you can find Web API key copy it and paste it in the place of "your api key here".
+
+Admob Integration:
+1. goto lib/service/ads/admobHelper.dart
+2. here currently test api keys are present in admobHelper.dart you need to replace it with real api keys
+3. to create admob api keys goto apps.admob.com and Create your API keys accordingly there are differnt types of ads units like banner ads, interstitial ads, etc, you get different api for different ad units.
+   
+if you have any query you can contact me any time.
+
 ### Screenshots
 ![project-featured2](https://github.com/ashwin066/Slots-App/assets/93830211/c966a483-7f92-4a93-9e92-5e4b254c95ec)
 
