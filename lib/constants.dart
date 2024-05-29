@@ -108,7 +108,7 @@ const LinearGradient kBlackGradientColor = LinearGradient(
     aBlack,
   ],
 );
-const String google_api_key = "AIzaSyD63a3gVLviNVW1RTMQgCG4OwaV2ZYakxE";
+const String google_api_key = "your api key here";
 
 final Future<FirebaseApp> firebaseInitialization = Firebase.initializeApp();
 FirebaseAuth auth = FirebaseAuth.instance;
