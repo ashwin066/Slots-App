@@ -15,7 +15,6 @@
 Slots App is a mobile application developed using Flutter and Dart programming languages, with Firebase as its backend service. The app allows users to book slots for different products and participate in a game of chance to win those products.
 
 ### Steps to get started
-OTP to Login and Check: 000666
 
 go to lib/constants.dart and find > const String google_api_key = "your api key here";
 then replace it with your api key.
